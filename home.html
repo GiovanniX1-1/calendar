@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scrapbook Calendar - Oktober 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- FontAwesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe6f7, #e6f0ff);
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Nama di pojok kiri atas */
+    .username {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    /* Efek bouncing untuk judul */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-15px); }
+      60% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #ff6ec7, #6a5acd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      animation: bounce 2s infinite;
+    }
+
+    /* Icon kalender */
+    .calendar-icon {
+      width: 30px;
+      height: 30px;
+      fill: #6a5acd;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      max-width: 900px;
+      margin: 0 auto 10px auto;
+    }
+
+    .day-header {
+      font-weight: bold;
+      text-transform: uppercase;
+      background: #6a5acd;
+      color: white;
+      padding: 10px 0;
+      border-radius: 8px;
+    }
+
+    .day {
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 90px;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      overflow: visible;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .day:hover {
+      transform: scale(1.05);
+      z-index: 5;
+      background-color: #f0e6ff; /* warna hover berbeda */
+    }
+
+    .day-number {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Dot warna berbeda */
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 5px auto 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .dot1 {
+      background: #e63946; /* merah - Holiday */
+    }
+
+    .dot2 {
+      background: #1d3557; /* biru - School Life */
+    }
+
+    .dot3 {
+      background: #2a9d8f; /* hijau - Personal Life */
+    }
+
+    .dot-content {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 280px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .dot:hover + .dot-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .carousel-inner img {
+      border-radius: 10px;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Legend keterangan dot */
+    .legend {
+      max-width: 900px;
+      margin: 0 auto 30px auto;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.holiday {
+      background: #e63946;
+    }
+    .legend-dot.school {
+      background: #1d3557;
+    }
+    .legend-dot.personal {
+      background: #2a9d8f;
+    }
+
+    /* Pagination buttons */
+    .pagination-buttons {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="username">Giovanni</div>
+
+  <h1>
+    <svg xmlns="http://www.w3.org/2000/svg" class="calendar-icon" viewBox="0 0 24 24">
+      <path d="M7 10h5v5H7zm-4-4h14v12H3z" fill="none"/>
+      <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H5V9h14v9zM7 10h5v5H7z"/>
+    </svg>
+    Oktober 2025
+  </h1>
+
+  <div class="calendar">
+    <!-- Header Hari -->
+    <div class="day-header">Min</div>
+    <div class="day-header">Sen</div>
+    <div class="day-header">Sel</div>
+    <div class="day-header">Rab</div>
+    <div class="day-header">Kam</div>
+    <div class="day-header">Jum</div>
+    <div class="day-header">Sab</div>
+
+
+    <div class="day"></div>
+    <div class="day"></div>
+    <div class="day"></div>
+
+    <!-- Tanggal 1–4 -->
+    <div class="day"><div class="day-number">1</div></div>
+    <div class="day"><div class="day-number">2</div></div>
+    <div class="day"><div class="day-number">3</div></div>
+    <div class="day"><div class="day-number">4</div></div>
+
+
+    <div class="day">
+      <div class="day-number">5</div>
+      <div class="dot dot1"></div>
+      <div class="dot-content p-2">
+        <div id="carousel5" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://images.unsplash.com/photo-1737530916785-f91994fcc7d1?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Foto 1" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-sun"></i> Hotel check in
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1737070672562-1d17d13a92a7?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto 2" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-mug-saucer"></i> Breakfast
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?w=400" class="d-block w-100" alt="Foto 3" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-water"></i> Go to the beach
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    <div class="day"><div class="day-number">6</div></div>
+    <div class="day"><div class="day-number">7</div></div>
+    <div class="day"><div class="day-number">8</div></div>
+    <div class="day"><div class="day-number">9</div></div>
+    <div class="day"><div class="day-number">10</div></div>
+    <div class="day"><div class="day-number">11</div></div>
+    <div class="day"><div class="day-number">12</div></div>
+    <div class="day"><div class="day-number">13</div></div>
+    <div class="day"><div class="day-number">14</div></div>
+
+    
+    <div class="day">
+      <div class="day-number">15</div>
+      <div class="dot dot2"></div>
+      <div class="dot-content p-2">
+        <div id="carousel15" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://plus.unsplash.com/premium_photo-1664299825291-909568eb8db7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Foto 1" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-book"></i> First day of school
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1709290749293-c6152a187b14?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Foto 2" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-chalkboard"></i> Favourite class
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto 3" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-graduation-cap"></i> Exams
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="day"><div class="day-number">16</div></div>
+    <div class="day"><div class="day-number">17</div></div>
+    <div class="day"><div class="day-number">18</div></div>
+    <div class="day"><div class="day-number">19</div></div>
+    <div class="day"><div class="day-number">20</div></div>
+    <div class="day"><div class="day-number">21</div></div>
+    <div class="day"><div class="day-number">22</div></div>
+    <div class="day"><div class="day-number">23</div></div>
+    <div class="day"><div class="day-number">24</div></div>
+
+    <!-- Tanggal 25 dengan 3 foto (dot3=personal life) -->
+    <div class="day">
+      <div class="day-number">25</div>
+      <div class="dot dot3"></div>
+      <div class="dot-content p-2">
+        <div id="carousel25" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://plus.unsplash.com/premium_photo-1664363806886-ab75b665d5ff?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto 1" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-heart"></i> Quality time with family
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://plus.unsplash.com/premium_photo-1667563113607-918f1778e95b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto 2" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-paw"></i> Take the dog for a walk
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://plus.unsplash.com/premium_photo-1731287744152-a133c0cf8845?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Foto 3" />
+              <div class="carousel-caption">
+                <i class="fa-solid fa-music"></i> Chill time with favourite music
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="day"><div class="day-number">26</div></div>
+    <div class="day"><div class="day-number">27</div></div>
+    <div class="day"><div class="day-number">28</div></div>
+    <div class="day"><div class="day-number">29</div></div>
+    <div class="day"><div class="day-number">30</div></div>
+    <div class="day"><div class="day-number">31</div></div>
+  </div>
+
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot holiday"></div>Holiday</div>
+    <div class="legend-item"><div class="legend-dot school"></div>School Life</div>
+    <div class="legend-item"><div class="legend-dot personal"></div>Personal Life</div>
+  </div>
+
+ 
+  <div class="pagination-buttons">
+    <button class="btn btn-outline-primary btn-sm" disabled>Prev</button>
+    <button class="btn btn-outline-primary btn-sm" disabled>Next</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
